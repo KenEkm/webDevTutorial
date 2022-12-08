@@ -1,7 +1,7 @@
 
 const data = {
     todos: ["JavaScript lernen", "Node.js lernen"],
-    addTodo: function(todo){
+    addTodo: function(todo){ //Kurzschreibweise: addTodo(todo){
         this.todos.push(todo)
         this.printTodos()
     },
