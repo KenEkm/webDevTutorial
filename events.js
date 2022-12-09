@@ -16,6 +16,8 @@ const bankModule = {
         console.log("Beitrag wird abgebucht für: " + name)
     }
 }
+
+//überschreibt onAddStudent Funktion. Nur an einer Stelle möglich. Sonst siehe events2.js
 studentModule.onAddStudent = (name) => {
     bankModule.chargeForStudent(name)
 }
