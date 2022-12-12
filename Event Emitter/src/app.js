@@ -16,6 +16,16 @@ const todoModule = {
         this.emit("add", newTodo)
     },
 
+    removeTodo(title){
+        for(const x in this.todos){
+            const todo = this.todos[x]
+            if(todo.title === title){
+                this.todos.splice(x, 1)
+                this.emit("remove", todo)
+            }
+        }
+    },
+
     completeTodo(title){
         for(const todo of this.todos){
             if(todo.title === title && todo.done === false){
@@ -85,6 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const newButtonElement = document.createElement("button")
         newButtonElement.classList.add("destroy")            
 
+        newButtonElement.addEventListener("click", (event) => {
+            todoModule.removeTodo(todo.title)
+        })
 
         const newLabelElement = document.createElement("label")
         newLabelElement.appendChild(document.createTextNode(todo.title))
@@ -115,6 +128,16 @@ document.addEventListener("DOMContentLoaded", () => {
         elements.todoList.prepend(newLiElement)
     })
 
+    todoModule.on("remove", (todo) => {
+        for(const liElement of elements.todoList.children){
+            const labelText = liElement.querySelector("label").innerText
+
+            if(todo.title === labelText){
+                liElement.remove()
+            }
+        }
+    })
+
     todoModule.on("changeTodo", (todo) => {
         for(const liElement of elements.todoList.children){
             const labelText = liElement.querySelector("label").innerText
@@ -134,5 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     todoModule.on("add", refreshFooter)
     todoModule.on("changeTodo", refreshFooter)
+    todoModule.on("remove", refreshFooter)
 
 });
