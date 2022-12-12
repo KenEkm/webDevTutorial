@@ -43,7 +43,7 @@ const todoModule = {
 
     emit(eventName, param){
         if(eventName in this.events){
-            for(const f of this.events){
+            for(const f of this.events[eventName]){
                 f(param)
             }
         }
@@ -65,4 +65,39 @@ document.addEventListener("DOMContentLoaded", () => {
         todoCount: document.querySelector(".todo-count strong"),
         clearCompleted: document.querySelector(".clear-completed")
     }
+
+    elements.newTodo.addEventListener("keypress", (event) => {
+        if(event.key === "Enter"){
+            const todoTitle = elements.newTodo.value
+            if(todoTitle !== ""){
+                todoModule.addTodo(todoTitle)
+            }
+        }
+    })
+
+    todoModule.on("add", (todo) => {
+
+        const newButtonElement = document.createElement("button")
+        newButtonElement.classList.add("destroy")            
+
+
+        const newLabelElement = document.createElement("label")
+        newLabelElement.appendChild(document.createTextNode(todo.title))
+
+        const newInputCheckbox = document.createElement("input")
+        newInputCheckbox.type = "checkbox"
+        newInputCheckbox.classList.add("toggle")
+
+        const newDivElement = document.createElement("div")
+        newDivElement.classList.add("view")
+        newDivElement.appendChild(newInputCheckbox)
+        newDivElement.appendChild(newLabelElement)
+        newDivElement.appendChild(newButtonElement)
+
+        const newLiElement = document.createElement("li")
+        newLiElement.appendChild(newDivElement)
+
+        elements.todoList.prepend(newLiElement)
+    })
+
 });
