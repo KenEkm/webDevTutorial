@@ -1,10 +1,6 @@
 
 const todoModule = {
-    todos: [
-        {title: "HTML lernen", done: true},
-        {title: "JavaScript lernen", done:false},
-        {title: "Node.js lernen", done:false}
-    ],
+    todos: [],
 
     addTodo(title){
         for(const todo of this.todos){
@@ -24,7 +20,16 @@ const todoModule = {
         for(const todo of this.todos){
             if(todo.title === title && todo.done === false){
                 todo.done = true
-                this.emit("complete", todo)
+                this.emit("changeTodo", todo)
+            }
+        }
+    },
+
+    unCompleteTodo(title){
+        for(const todo of this.todos){
+            if(todo.title === title && todo.done === true){
+                todo.done = false
+                this.emit("changeTodo", todo)
             }
         }
     },
@@ -32,7 +37,7 @@ const todoModule = {
     getTodoCount(){
         let todoCount = 0
         for(const todo of this.todos){
-            if(todo.done === fals){
+            if(todo.done === false){
                 todoCount++
             }
         }
@@ -88,6 +93,16 @@ document.addEventListener("DOMContentLoaded", () => {
         newInputCheckbox.type = "checkbox"
         newInputCheckbox.classList.add("toggle")
 
+        newInputCheckbox.addEventListener("change", (event) => {
+            const checkboxChecked = newInputCheckbox.checked
+            if(checkboxChecked){
+                todoModule.completeTodo(todo.title)
+            } else {
+                todoModule.unCompleteTodo(todo.title)
+            }
+            console.log("todoModule: ", todoModule)
+        })
+
         const newDivElement = document.createElement("div")
         newDivElement.classList.add("view")
         newDivElement.appendChild(newInputCheckbox)
@@ -99,5 +114,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
         elements.todoList.prepend(newLiElement)
     })
+
+    todoModule.on("changeTodo", (todo) => {
+        for(const liElement of elements.todoList.children){
+            const labelText = liElement.querySelector("label").innerText
+
+            if(todo.title === labelText){
+                if(todo.done){
+                    liElement.classList.add("completed")
+                } else {
+                    liElement.classList.remove("completed")
+                }
+            }
+        }
+    })
+
+    const refreshFooter = () => {
+        elements.todoCount.innerText = todoModule.getTodoCount()
+    }
+    todoModule.on("add", refreshFooter)
+    todoModule.on("changeTodo", refreshFooter)
 
 });
