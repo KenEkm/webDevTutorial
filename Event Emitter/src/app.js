@@ -16,6 +16,14 @@ const todoModule = {
         this.emit("add", newTodo)
     },
 
+    removeCompletedTodos(){
+        for(const todo of this.todos){
+            if(todo.done){
+                this.removeTodo(todo.title)
+            }
+        }
+    },
+
     removeTodo(title){
         for(const x in this.todos){
             const todo = this.todos[x]
@@ -81,11 +89,16 @@ document.addEventListener("DOMContentLoaded", () => {
         clearCompleted: document.querySelector(".clear-completed")
     }
 
+    elements.clearCompleted.addEventListener("click", (event) => {
+        todoModule.removeCompletedTodos()
+    })
+
     elements.newTodo.addEventListener("keypress", (event) => {
         if(event.key === "Enter"){
             const todoTitle = elements.newTodo.value
             if(todoTitle !== ""){
                 todoModule.addTodo(todoTitle)
+                elements.newTodo.value = ""
             }
         }
     })
