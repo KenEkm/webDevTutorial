@@ -1,14 +1,20 @@
 
+const getId = (() => {
+    let counter = 1;
+
+    return() => {
+        counter++
+        return counter
+    }
+})()
+
+
 const todoModule = {
     todos: [],
 
     addTodo(title){
-        for(const todo of this.todos){
-            if(todo.title === title){
-                return
-            }
-        }
         const newTodo = {
+            id: getId(),
             title: title,
             done: false
         }
@@ -19,33 +25,33 @@ const todoModule = {
     removeCompletedTodos(){
         for(const todo of this.todos){
             if(todo.done){
-                this.removeTodo(todo.title)
+                this.removeTodo(todo.id)
             }
         }
     },
 
-    removeTodo(title){
+    removeTodo(id){
         for(const x in this.todos){
             const todo = this.todos[x]
-            if(todo.title === title){
+            if(todo.id === id){
                 this.todos.splice(x, 1)
                 this.emit("remove", todo)
             }
         }
     },
 
-    completeTodo(title){
+    completeTodo(id){
         for(const todo of this.todos){
-            if(todo.title === title && todo.done === false){
+            if(todo.id === id && todo.done === false){
                 todo.done = true
                 this.emit("changeTodo", todo)
             }
         }
     },
 
-    unCompleteTodo(title){
+    unCompleteTodo(id){
         for(const todo of this.todos){
-            if(todo.title === title && todo.done === true){
+            if(todo.id === id && todo.done === true){
                 todo.done = false
                 this.emit("changeTodo", todo)
             }
@@ -109,7 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
         newButtonElement.classList.add("destroy")            
 
         newButtonElement.addEventListener("click", (event) => {
-            todoModule.removeTodo(todo.title)
+            todoModule.removeTodo(todo.id)
         })
 
         const newLabelElement = document.createElement("label")
@@ -122,9 +128,9 @@ document.addEventListener("DOMContentLoaded", () => {
         newInputCheckbox.addEventListener("change", (event) => {
             const checkboxChecked = newInputCheckbox.checked
             if(checkboxChecked){
-                todoModule.completeTodo(todo.title)
+                todoModule.completeTodo(todo.id)
             } else {
-                todoModule.unCompleteTodo(todo.title)
+                todoModule.unCompleteTodo(todo.id)
             }
             console.log("todoModule: ", todoModule)
         })
@@ -136,32 +142,23 @@ document.addEventListener("DOMContentLoaded", () => {
         newDivElement.appendChild(newButtonElement)
 
         const newLiElement = document.createElement("li")
+        newLiElement.setAttribute("data-id", todo.id)
         newLiElement.appendChild(newDivElement)
 
         elements.todoList.prepend(newLiElement)
     })
 
     todoModule.on("remove", (todo) => {
-        for(const liElement of elements.todoList.children){
-            const labelText = liElement.querySelector("label").innerText
-
-            if(todo.title === labelText){
-                liElement.remove()
-            }
-        }
+        const liElement = elements.todoList.querySelector("li[data-id='" + todo.id + "']")
+        liElement.remove()
     })
 
     todoModule.on("changeTodo", (todo) => {
-        for(const liElement of elements.todoList.children){
-            const labelText = liElement.querySelector("label").innerText
-
-            if(todo.title === labelText){
-                if(todo.done){
-                    liElement.classList.add("completed")
-                } else {
-                    liElement.classList.remove("completed")
-                }
-            }
+        const liElement = elements.todoList.querySelector("li[data-id='" + todo.id + "']")
+        if(todo.done){
+            liElement.classList.add("completed")
+        } else {
+            liElement.classList.remove("completed")
         }
     })
 
