@@ -1,4 +1,4 @@
-
+//Prototypen. Dokumentation rät davon ab. Lösung: constructor functions
 
 const studentActions = {
     getName: function(){
@@ -32,3 +32,4 @@ const student2 = Object.create(studentActions, {
 console.log(student.getName())
 console.log(student2.getName())
 
+console.log(Object.getPrototypeOf(student))
