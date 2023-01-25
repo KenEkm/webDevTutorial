@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <!--
+            Wird hier lediglich die src/index.js eingebunden, funktionieren die mit 
+            require eingebundenen js Dateien nicht. Es müssen mit creatapp.dev zunächst
+            die package.json und webpack.config.js Konfigurationsdateien generiert, ins Projekt
+            eingebunden und anschließend mit npm install die dependencies (webpack) installiert werden.
+            Anschließend wird mit npx webpack die dist/bundles.js generiert, welche die 
+            Dateiabhängigkeiten in einer vom Browser lesbaren syntax darstellt. wird diese
+            als scriptsource eingebunden, können alle js Dateien ausgeführt werden.
+        -->
+        <script type="text/javascript" src='./dist/bundle.js'></script>
+    </body>
+</html>
