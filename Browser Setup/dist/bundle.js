@@ -1,0 +1,1 @@
+(()=>{var o={82:()=>{console.log("This is other.js")}},r={};(function s(e){var i=r[e];if(void 0!==i)return i.exports;var t=r[e]={exports:{}};return o[e](t,t.exports,s),t.exports})(82),console.log("This is index.js")})();
