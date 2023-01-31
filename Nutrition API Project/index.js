@@ -2,25 +2,35 @@
 
 
 const axios = require("axios")
-/*
-axios.get("https://api.nal.usda.gov/fdc/v1/foods/search", {
-    params: {
-        api_key: "zLXDRhUpG9vmq2gToKhTQOTq2kFdV44khbgwayXo",
-        query: "Apple"
-    }
-})
-    .then(function (response) {
-        for (const food of response.data['foods']) {
-            console.log(food['fdcId'] + ": " + food['description'])
+
+function search(term) {
+    return axios.get("https://api.nal.usda.gov/fdc/v1/foods/search", {
+        params: {
+            api_key: "zLXDRhUpG9vmq2gToKhTQOTq2kFdV44khbgwayXo",
+            query: term
         }
     })
-*/
+        .then(function (response) {
+            return response.data['foods']
+        })
+}
 
-axios.get("https://api.nal.usda.gov/fdc/v1/food/454004", {
-    params: {
-        api_key: "zLXDRhUpG9vmq2gToKhTQOTq2kFdV44khbgwayXo"
-    }
+search("Apple").then(function(x){
+    console.log(x)
 })
-    .then(function (response) {
-        console.log(response.data)
+
+function info(fdcid){
+    return axios.get("https://api.nal.usda.gov/fdc/v1/food/" + fdcid, {
+        params: {
+            api_key: "zLXDRhUpG9vmq2gToKhTQOTq2kFdV44khbgwayXo"
+        }
     })
+        .then(function (response) {
+            return response.data
+        })
+}
+
+
+info(167733).then(function(p){
+    console.log(p)
+})
