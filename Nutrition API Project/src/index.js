@@ -11,3 +11,7 @@ const productSearch = new ProductSearch(
 )
 
 productSearch.init()
+
+productSearch.events.on("productSelected", (fdcId) => {
+    alert("fdcId: " + fdcId)
+})

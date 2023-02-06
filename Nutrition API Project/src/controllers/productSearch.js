@@ -1,5 +1,8 @@
 
+const EventEmitter = require("eventemitter3")
+
 const {search} = require("../api/product")
+const{on} = require("../utils/dom")
 
 /**
  * 
@@ -11,6 +14,8 @@ function productSearch(inputElement, buttonElement, resultElement) {
     this.inputElement = inputElement
     this.buttonElement = buttonElement
     this.resultElement = resultElement
+
+    this.events = new EventEmitter()
 }
 
 productSearch.prototype.init = function() {
@@ -19,6 +24,13 @@ productSearch.prototype.init = function() {
 
         const inputValue = this.inputElement.value
         this.runSearch(inputValue)
+    })
+
+    on(".product-search--result-item", "click", (event) => {
+        event.originalEvent.preventDefault()
+        const fdcId = event.handleObj.getAttribute("data-fdcid")
+        
+        this.events.emit("productSelected", fdcId)
     })
 }
 
