@@ -2,10 +2,11 @@
 
 require("../scss/index.scss")
 
-const {search, info} = require("./api/product")
+const ProductSearch = require("./controllers/productSearch")
 
-const testTemplate = require("./templates/test.ejs")
-console.log(testTemplate({name: "TEST!"}))
+const productSearch = new ProductSearch(
+    document.getElementById("productSearchInput"),
+    document.getElementById("productSearchButton")
+)
 
-search("Apple").then((res) => console.log(res))
-// info(171689).then((res) => console.log(res))
+productSearch.init()
