@@ -34,7 +34,7 @@ productList.prototype.emitNutrients = function(){
 }
 
 productList.prototype.getNutrientsForProduct = function (product){
-    console.log(product)
+    //console.log(product)
     const nutrients = {
         carbs: 0,
         protein: 0,
@@ -97,6 +97,13 @@ productList.prototype.removeProduct = function(fdcId){
 }
 
 productList.prototype.addProduct = function(fdcId){
+
+    for(const product of this.products){
+        if(product.product['fdcId'] === fdcId){
+            return
+        }
+    }
+
     info(fdcId)
         .then((product) => {
             this.products.push({
