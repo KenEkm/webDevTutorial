@@ -22,3 +22,7 @@ productList.addProduct(2012128)
 productSearch.events.on("productSelected", (fdcId) => {
     productList.addProduct(fdcId)
 })
+
+productList.events.on("nutrientChange", (nutrients) => {
+    console.log(nutrients)
+})

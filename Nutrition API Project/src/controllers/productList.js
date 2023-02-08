@@ -3,6 +3,7 @@
 const{info} = require("../api/product")
 const {on} = require("../utils/dom")
 const addProductTemplate = require("../templates/ProductList/addProduct.ejs")
+const { EventEmitter } = require("eventemitter3")
 
 /**
  * 
@@ -12,6 +13,7 @@ function productList(listElement) {
     this.products = []
     this.listElement = listElement
 
+    this.events = new EventEmitter()
 }
 
 productList.prototype.init = function(){
@@ -26,19 +28,25 @@ productList.prototype.init = function(){
     })
 }
 
+productList.prototype.emitNutrients = function(){
+    const nutrients = this.getNutrients()
+    this.events.emit("nutrientChange", nutrients)
+}
+
 productList.prototype.getNutrientsForProduct = function (product){
+    console.log(product)
     const nutrients = {
         carbs: 0,
         protein: 0,
         fat: 0
     }
     for(const foodNutrient of product.product.foodNutrients){
-        if(foodNutrient.nutrientNumber === "205"){
-            nutrients.carbs = foodNutrient.value
-        } else if(foodNutrient.nutrientNumber === "204"){
-            nutrients.fat = foodNutrient.value
-        } else if(foodNutrient.nutrientNumber === "203"){
-            nutrients.protein = foodNutrient.value
+        if(foodNutrient.nutrient.number === "205"){
+            nutrients.carbs = foodNutrient.amount
+        } else if(foodNutrient.nutrient.number === "204"){
+            nutrients.fat = foodNutrient.amount
+        } else if(foodNutrient.nutrient.number === "203"){
+            nutrients.protein = foodNutrient.amount
         }
     }
     return {
@@ -72,7 +80,7 @@ productList.prototype.updateAmount = function(fdcId, value){
             break
         }
     }
-    console.log("updateAmount: " + value)
+    this.emitNutrients()
 }
 
 productList.prototype.removeProduct = function(fdcId){
@@ -85,7 +93,7 @@ productList.prototype.removeProduct = function(fdcId){
             break
         }
     }
-    console.log("this.products: " + this.products)
+    this.emitNutrients()
 }
 
 productList.prototype.addProduct = function(fdcId){
@@ -105,6 +113,8 @@ productList.prototype.addProduct = function(fdcId){
             this.listElement.insertAdjacentHTML("beforeend", productHtml)
 
             //this.getNutrients()
+
+            this.emitNutrients()
         })
 }
 
