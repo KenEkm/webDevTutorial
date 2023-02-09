@@ -123,6 +123,9 @@ productList.prototype.addProduct = function(fdcId){
 
             this.emitNutrients()
         })
+        .catch((err) => {
+            alert("Produkt konnte nicht hinzugefügt werden. Bitte wiederholen.")
+        })
 }
 
 module.exports = productList
