@@ -16,9 +16,9 @@ productNutrients.prototype.init = function(){
 }
 
 productNutrients.prototype.setNutrients = function(nutrients){
-    this.carbElement.innerText = Math.round(nutrients.carbs * 100) / 100
-    this.proteinElement.innerText = Math.round(nutrients.protein * 100) / 100
-    this.fatElement.innerText = Math.round(nutrients.fat * 100) / 100
+    this.carbElement.textContent = Math.round(nutrients.carbs * 100) / 100
+    this.proteinElement.textContent = Math.round(nutrients.protein * 100) / 100
+    this.fatElement.textContent = Math.round(nutrients.fat * 100) / 100
 }
 
 module.exports = productNutrients
