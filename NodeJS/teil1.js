@@ -4,13 +4,31 @@ const http = require("http")
 
 const app = http.createServer((req, res) => {
     console.log("Server wurde erstellt.")
+    console.log("requested url: " + req.url)
 
-    res.writeHead(404, {
-        "Content-Type": "text/html"
-    })
+    if(req.url === "/"){
+        res.writeHead(200, {
+            "Content-Type": "text/html"
+        })
+        res.write("<strong>Startseite...</strong>")
+        res.end()
+        return
+    } else if(req.url === "/home"){
+        res.writeHead(200, {
+            "Content-Type": "text/html"
+        })
 
-    res.write("<strong>Hallo Welt</strong>")
-    res.end()
+        res.write("<strong>Home...</strong>")
+        res.end()
+        return
+    } else {
+        res.writeHead(404, {
+            "Content-Type": "text/html"
+        })
+    
+        res.write("<strong>404 not found!</strong>")
+        res.end()
+    }
 })
 
 app.listen(8090)
